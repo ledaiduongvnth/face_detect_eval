@@ -5,7 +5,7 @@ import torch
 from centerface import CenterFace
 
 save_folder = "./prediction/"
-dataset_folder = "./widerface_val/images/"
+dataset_folder = "../widerface_val/images/"
 
 
 if __name__ == '__main__':
