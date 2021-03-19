@@ -283,7 +283,7 @@ def evaluation(pred, gt_path, iou_thresh=0.5):
 
 if __name__ == '__main__':
     ground_truth = "ground_truth/"
-    prediction = "test_retina_pytorch_mobilenetv2/prediction/"
+    prediction = "/mnt/hdd/PycharmProjects/face_eval/t_centerface/prediction"
     evaluation(prediction, ground_truth)
 
 
