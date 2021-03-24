@@ -41,26 +41,38 @@ int main() {
         boost::filesystem::path dir = p.parent_path();
         std::string dirname = dir.string();
         boost::filesystem::create_directories(dirname);
-        std::vector<Anchor> boxes = faceRecognizer->Detect(img);
+        std::vector<Anchor> result = faceRecognizer->Detect(img);
+        float scale = faceRecognizer->scale;
         std::string abs_file_name = p.filename().string();
         std::string file_name = abs_file_name.substr(0, abs_file_name.size() - 4) + "\n";
-        myfile << file_name;
-        printf("%s\n", file_name.c_str());
-        myfile << std::to_string(boxes.size()) + "\n";
-        for (auto box : boxes) {
+        myfile <<file_name;
+        printf("%s\n", save_name.c_str());
+        myfile << std::to_string(result.size()) + "\n";
+
+        for (auto box : result) {
             cv::Rect cvbox = cv::Rect(box.finalbox.x, box.finalbox.y,
                                       box.finalbox.width - box.finalbox.x,
                                       box.finalbox.height - box.finalbox.y);
-            int x = cvbox.x, y = cvbox.y, w = cvbox.width, h = cvbox.height;
+            int x = cvbox.x / scale, y = cvbox.y / scale, w = cvbox.width / scale, h = cvbox.height/scale;
+
+//            cv::rectangle(
+//                    img,
+//                    cv::Point(x, y),
+//                    cv::Point(x + w, y + h),
+//                    cv::Scalar(0, 0, 255),
+//                    2
+//            );
+
             float confidence = box.score;
             std::string line =
                     std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(w) + " " + std::to_string(h) +
                     " " + std::to_string(confidence) + " \n";
-            myfile << line;
+            myfile <<line;
         }
         myfile.close();
+
+//        cv::imshow("aaa", img);
+//        cv::waitKey(0);
     }
-
-
 }
 
