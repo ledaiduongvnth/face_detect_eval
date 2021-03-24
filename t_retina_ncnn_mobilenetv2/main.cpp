@@ -19,10 +19,10 @@ std::vector<std::string> readLines(const std::string &filename) {
 
 
 int main() {
-    std::string save_folder = "../prediction";
-    std::string dataset_folder = "../../widerface_val/images";
+    std::string save_folder = "/mnt/hdd/PycharmProjects/face_eval/t_retina_ncnn_mobilenetv2/prediction";
+    std::string dataset_folder = "/mnt/hdd/PycharmProjects/face_eval/widerface_val/images";
     std::string testset_folder = dataset_folder;
-    std::string tesetset_list = "../../widerface_val/wider_val.txt";
+    std::string tesetset_list = "/mnt/hdd/PycharmProjects/face_eval/widerface_val/wider_val.txt";
     std::vector<std::string> test_dataset = readLines(tesetset_list);
     std::string detectorParamPath = "/mnt/hdd/CLionProjects/frvt1N/1N/config/retina.param";
     std::string detectorBinPath = "/mnt/hdd/CLionProjects/frvt1N/1N/config/retina.bin";
@@ -36,15 +36,26 @@ int main() {
         }
         std::string save_name = save_folder + image_name.substr(0, image_name.size() - 4) + ".txt";
         std::ofstream myfile;
-        myfile.open(save_name);
         boost::filesystem::path p(save_name);
         boost::filesystem::path dir = p.parent_path();
         std::string dirname = dir.string();
-        boost::filesystem::create_directories(dirname);
+        if(!boost::filesystem::exists(dirname)){
+            bool isCreated = boost::filesystem::create_directories(dirname);
+            printf("%s\n", std::to_string(isCreated).c_str());
+            printf("%s\n", dirname.c_str());
+            usleep(1000);
+        }
+
+        while (!boost::filesystem::exists(dirname)){
+            printf("waiting ....");
+            usleep(1000);
+        }
+
         std::vector<Anchor> result = faceRecognizer->Detect(img);
         float scale = faceRecognizer->scale;
         std::string abs_file_name = p.filename().string();
         std::string file_name = abs_file_name.substr(0, abs_file_name.size() - 4) + "\n";
+        myfile.open(save_name);
         myfile <<file_name;
         printf("%s\n", save_name.c_str());
         myfile << std::to_string(result.size()) + "\n";
