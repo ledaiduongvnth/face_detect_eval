@@ -50,7 +50,7 @@ public:
         return scaledImage;
     }
 
-    std::vector<cv::Rect> Detect(cv::Mat& originImage) {
+    std::vector<Anchor> Detect(cv::Mat& originImage) {
         cv::Mat scaledImage = PreProcess(originImage);
         landmarks.clear();
         ncnn::Mat input = ncnn::Mat::from_pixels_resize(
@@ -86,14 +86,14 @@ public:
         }
         std::vector<Anchor> result;
         nms_cpu(proposals, nms_threshold, result);
-        std::vector<cv::Rect> boundingBoxes;
-        for (int i = 0; i < result.size(); i++) {
-            cv::Rect box = cv::Rect(result[i].finalbox.x, result[i].finalbox.y,
-                                    result[i].finalbox.width - result[i].finalbox.x,
-                                    result[i].finalbox.height - result[i].finalbox.y);
-            boundingBoxes.push_back(box);
-        }
-        return boundingBoxes;
+//        std::vector<cv::Rect> boundingBoxes;
+//        for (int i = 0; i < result.size(); i++) {
+//            cv::Rect box = cv::Rect(result[i].finalbox.x, result[i].finalbox.y,
+//                                    result[i].finalbox.width - result[i].finalbox.x,
+//                                    result[i].finalbox.height - result[i].finalbox.y);
+//            boundingBoxes.push_back(box);
+//        }
+        return result;
     }
 
 };

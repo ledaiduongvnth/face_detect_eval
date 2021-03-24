@@ -1,17 +1,66 @@
 #include "face_recognition.h"
+#include <iostream>
+#include "boost/filesystem.hpp"
+
+
+std::vector<std::string> readLines(const std::string &filename) {
+    std::ifstream ifs(filename);
+    std::vector<std::string> lines;
+    if (!ifs) {
+        std::cerr << "Cannot open file: " << filename << std::endl;
+    } else {
+        for (std::string line; std::getline(ifs, line); /**/) {
+            lines.push_back(line);
+        }
+        std::cout << std::to_string(lines.size()) << " lines read from [" << filename << "]" << std::endl;
+    }
+    return lines;
+}
+
 
 int main() {
-    std::string ImagesPath = "/home/d/Downloads";
+    std::string save_folder = "../prediction";
+    std::string dataset_folder = "../../widerface_val/images";
+    std::string testset_folder = dataset_folder;
+    std::string tesetset_list = "../../widerface_val/wider_val.txt";
+    std::vector<std::string> test_dataset = readLines(tesetset_list);
     std::string detectorParamPath = "/mnt/hdd/CLionProjects/frvt1N/1N/config/retina.param";
     std::string detectorBinPath = "/mnt/hdd/CLionProjects/frvt1N/1N/config/retina.bin";
-    std::unique_ptr<FaceRecognizer> faceRecognizer( new FaceRecognizer(detectorParamPath, detectorBinPath));
-    std::string image_path = "/mnt/hdd/CLionProjects/frvt1N/common/images/eyesClosed.ppm";
-    cv::Mat originImage = cv::imread(image_path);
-    if (!originImage.data) {
-        printf("load error");
-        throw std::exception();
+    std::unique_ptr<FaceRecognizer> faceRecognizer(new FaceRecognizer(detectorParamPath, detectorBinPath));
+    for (std::string image_name : test_dataset) {
+        std::string image_path = testset_folder + image_name;
+        cv::Mat img = cv::imread(image_path);
+        if (!img.data) {
+            printf("load error");
+            throw std::exception();
+        }
+        std::string save_name = save_folder + image_name.substr(0, image_name.size() - 4) + ".txt";
+        std::ofstream myfile;
+        myfile.open(save_name);
+        boost::filesystem::path p(save_name);
+        boost::filesystem::path dir = p.parent_path();
+        std::string dirname = dir.string();
+        boost::filesystem::create_directories(dirname);
+        std::vector<Anchor> boxes = faceRecognizer->Detect(img);
+        std::string abs_file_name = p.filename().string();
+        std::string file_name = abs_file_name.substr(0, abs_file_name.size() - 4) + "\n";
+        myfile << file_name;
+        printf("%s\n", file_name.c_str());
+        myfile << std::to_string(boxes.size()) + "\n";
+        for (auto box : boxes) {
+            cv::Rect cvbox = cv::Rect(box.finalbox.x, box.finalbox.y,
+                                      box.finalbox.width - box.finalbox.x,
+                                      box.finalbox.height - box.finalbox.y);
+            int x = cvbox.x, y = cvbox.y, w = cvbox.width, h = cvbox.height;
+            float confidence = box.score;
+            std::string line =
+                    std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(w) + " " + std::to_string(h) +
+                    " " + std::to_string(confidence) + " \n";
+            myfile << line;
+        }
+        myfile.close();
     }
-    std::vector<cv::Rect> boundingBoxes = faceRecognizer->Detect(originImage);
-    printf("\n");
+
+
 }
 

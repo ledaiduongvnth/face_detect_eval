@@ -22,6 +22,7 @@ include_directories(
 
 target_link_libraries(
         retinafacencnnmnetv2
+        -lboost_filesystem -lboost_system
         ${OpenCV_LIBS}
         ${CMAKE_CURRENT_SOURCE_DIR}/ncnn/lib/libncnn.a
 )
