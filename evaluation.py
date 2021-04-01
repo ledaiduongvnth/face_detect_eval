@@ -261,19 +261,30 @@ def evaluation(pred, gt_path, iou_thresh=0.5):
                 ignore = np.zeros(gt_boxes.shape[0])
                 if len(keep_index) != 0:
                     ignore[keep_index-1] = 1
+                print("-------------------------------------")
+                print("-------------1----pred_info----------: ", pred_info)
+                print("-------------2----img_list[j][0][0]----------: ", img_list[j][0][0])
+                print("-------------3----gt_boxes----------: ", gt_bbx_list[j][0])
+                print("-------------4----keep_index----------: ", keep_index)
+                print("-------------5----count_face----------: ", count_face)
                 pred_recall, proposal_list = image_eval(pred_info, gt_boxes, ignore, iou_thresh)
 
                 _img_pr_info = img_pr_info(thresh_num, pred_info, proposal_list, pred_recall)
 
                 pr_curve += _img_pr_info
         pr_curve = dataset_pr_info(thresh_num, pr_curve, count_face)
+        
+
 
         propose = pr_curve[:, 0]
         recall = pr_curve[:, 1]
 
         ap = voc_ap(recall, propose)
         aps.append(ap)
-
+        print("------------------thresh_num-------------------: ", thresh_num)
+        print("------------------pr_curve-------------------: ", pr_curve)
+        print("------------------count_face-------------------: ", count_face)
+    
     print("==================== Results ====================")
     print("Easy   Val AP: {}".format(aps[0]))
     print("Medium Val AP: {}".format(aps[1]))
@@ -282,8 +293,10 @@ def evaluation(pred, gt_path, iou_thresh=0.5):
 
 
 if __name__ == '__main__':
+    # Ground truth contains labels of bounding box for faces in images
     ground_truth = "ground_truth/"
-    prediction = "/mnt/hdd/PycharmProjects/face_eval/t_centerface/prediction"
+    # Input text file contains prediction result of small model for evaluation
+    prediction = "./t_centerface/prediction"
     evaluation(prediction, ground_truth)
 
 

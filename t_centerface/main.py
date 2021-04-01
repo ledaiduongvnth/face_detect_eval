@@ -4,7 +4,9 @@ import cv2
 import torch
 from centerface import CenterFace
 
+# Folder for saving face detection results
 save_folder = "./prediction/"
+# Folder for containing input images
 dataset_folder = "../widerface_val/images/"
 
 
