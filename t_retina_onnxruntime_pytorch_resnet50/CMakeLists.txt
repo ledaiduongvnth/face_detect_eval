@@ -3,9 +3,9 @@ project(retinafacencnnmnetv2)
 
 add_executable(
         retinafacencnnmnetv2
-        main.cpp
         FaceDetector.h
         FaceDetector.cpp
+        main.cpp
 )
 find_package(OpenCV REQUIRED)
 set(CMAKE_PREFIX_PATH /opt/intel/openvino_2021.2.200/deployment_tools/inference_engine/share)

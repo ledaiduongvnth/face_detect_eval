@@ -42,7 +42,7 @@ public:
 
     void nms(std::vector<bbox> &input_boxes, float NMS_THRESH);
 
-    void Detect(std::vector<bbox>& boxes, std::vector<std::vector<float>> results);
+    void Detect(std::vector<bbox>& boxes,  std::vector<std::vector<float>> results, int inh, int inw, std::vector<box>& anchor);
 
     void create_anchor(std::vector<box> &anchor, int w, int h);
 

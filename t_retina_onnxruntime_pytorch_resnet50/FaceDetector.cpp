@@ -1,21 +1,19 @@
 #include <algorithm>
 //#include "omp.h"
 #include "FaceDetector.h"
-#define  inw 640
-#define  inh 640
+//#define  inw 640
+//#define  inh 640
 Detector::Detector():
         _nms(0.4),
-        _threshold(0.5)
+        _threshold(0.99)
 {
 }
 Detector::~Detector()
 {
 }
 
-void Detector::Detect(std::vector<bbox>& boxes,  std::vector<std::vector<float>> results)
+void Detector::Detect(std::vector<bbox>& boxes,  std::vector<std::vector<float>> results, int inh, int inw, std::vector<box>& anchor)
 {
-    std::vector<box> anchor;
-    create_anchor_retinaface(anchor, inw, inh);
 //    create_anchor(anchor, inw, inh);
     std::vector<bbox > total_box;
     std::vector<float> loc = results[0];

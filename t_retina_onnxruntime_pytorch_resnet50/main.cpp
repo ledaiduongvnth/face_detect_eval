@@ -25,20 +25,6 @@ std::vector<std::string> readLines(const std::string &filename) {
     return lines;
 }
 
-void PreProcess(const cv::Mat &img, cv::Mat& outputImg, float& scale) {
-    float long_side = std::max(img.cols, img.rows);
-    scale = 640 / long_side;
-    if (img.cols > img.rows) {
-        cv::copyMakeBorder(img, outputImg, 0, img.cols - img.rows, 0, 0,
-                           cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    } else if (img.cols < img.rows) {
-        cv::copyMakeBorder(img, outputImg, 0, 0, 0, img.rows - img.cols,
-                           cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
-    } else{
-        outputImg = img;
-    }
-    cv::resize(outputImg, outputImg, cv::Size(640, 640), 0, 0,cv::InterpolationFlags::INTER_CUBIC);
-}
 
 
 int main() {
@@ -49,15 +35,15 @@ int main() {
     sessionOptions.SetIntraOpNumThreads(1);
     OrtOpenVINOProviderOptions options;
     options.device_type = "CPU_FP32";
-    options.num_of_threads = 8;
+    options.num_of_threads = 1;
     sessionOptions.AppendExecutionProvider_OpenVINO(options);
     sessionOptions.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_DISABLE_ALL);
     Ort::Session session(env, modelFilepath.c_str(), sessionOptions);
-    std::vector<int64_t> inputDims {1, 3, 640, 640};
-    std::vector<const char*> inputNames{"input0"};
-    std::vector<const char*> outputNames{"output0", "833", "832"};
+    std::vector<const char*> inputNames{"input"};
+    std::vector<const char*> outputNames{"output", "outputt", "outputtt"};
     Ort::MemoryInfo memoryInfo = Ort::MemoryInfo::CreateCpu(OrtAllocatorType::OrtArenaAllocator, OrtMemType::OrtMemTypeDefault);
-    std::vector<int> outputDims{16800*4, 16800*2, 16800*10};
+
+
 
     std::string save_folder = "/mnt/hdd/PycharmProjects/face_eval/t_retina_onnxruntime_pytorch_resnet50/prediction";
     std::string dataset_folder = "/mnt/hdd/PycharmProjects/face_eval/widerface_val/images";
@@ -90,11 +76,15 @@ int main() {
         }
 
         /////////////////////////////////////////////////////////////////////////
+        std::vector<box> anchor;
+        detector.create_anchor_retinaface(anchor, img.cols, img.rows);
+        int anchorsSize = anchor.size();
+        std::vector<int> outputDims{anchorsSize*4, anchorsSize*2, anchorsSize*10};
         cv::Mat originImage= img.clone();
         cv::Mat resizedImageBGR, resizedImageRGB, resizedImage, preprocessedImage;
-        float scale;
-        PreProcess(img, resizedImageBGR, scale);
-        resizedImageBGR.convertTo(resizedImage, CV_32F);
+        float scale = 1;
+        std::vector<int64_t> inputDims {1, 3, img.rows, img.cols};
+        img.convertTo(resizedImage, CV_32F);
         cv::Mat channels[3];
         cv::split(resizedImage, channels);
         channels[0] = channels[0] - 104;
@@ -102,7 +92,7 @@ int main() {
         channels[2] = channels[2] - 123;
         cv::merge(channels, 3, resizedImage);
         cv::dnn::blobFromImage(resizedImage, preprocessedImage);
-        Ort::Value inputTensors = Ort::Value::CreateTensor<float>(memoryInfo, (float*)preprocessedImage.data, 640*640*3, inputDims.data(), 4);
+        Ort::Value inputTensors = Ort::Value::CreateTensor<float>(memoryInfo, (float*)preprocessedImage.data, img.rows*img.cols*3, inputDims.data(), 4);
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         std::vector<Ort::Value> ort_outputs = session.Run(Ort::RunOptions{nullptr}, inputNames.data(), &inputTensors, 1, outputNames.data(), 3);
         std::vector<bbox> result;
@@ -111,7 +101,23 @@ int main() {
             std::vector<float> outputi = std::vector<float>(ort_outputs[l].GetTensorMutableData<float>(), ort_outputs[l].GetTensorMutableData<float>() + outputDims[l]);
             results.emplace_back(outputi);
         }
-        detector.Detect(result, results);
+        detector.Detect(result, results, img.rows, img.cols, anchor);
+
+//        for (int j = 0; j < result.size(); ++j) {
+//            cv::Rect rect(result[j].x1/scale, result[j].y1/scale, result[j].x2/scale - result[j].x1/scale, result[j].y2/scale - result[j].y1/scale);
+//            cv::rectangle(originImage, rect, cv::Scalar(0, 0, 255), 1, 8, 0);
+//            char test[80];
+//            sprintf(test, "%f", result[j].s);
+//            cv::putText(originImage, test, cv::Size((result[j].x1/scale), result[j].y1/scale), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 255, 255));
+//            cv::circle(originImage, cv::Point(result[j].point[0]._x / scale, result[j].point[0]._y / scale), 1, cv::Scalar(0, 0, 225), 4);
+//            cv::circle(originImage, cv::Point(result[j].point[1]._x / scale, result[j].point[1]._y / scale), 1, cv::Scalar(0, 255, 225), 4);
+//            cv::circle(originImage, cv::Point(result[j].point[2]._x / scale, result[j].point[2]._y / scale), 1, cv::Scalar(255, 0, 225), 4);
+//            cv::circle(originImage, cv::Point(result[j].point[3]._x / scale, result[j].point[3]._y / scale), 1, cv::Scalar(0, 255, 0), 4);
+//            cv::circle(originImage, cv::Point(result[j].point[4]._x / scale, result[j].point[4]._y / scale), 1, cv::Scalar(255, 0, 0), 4);
+//        }
+//        cv::imshow("img", originImage);
+//        cv::waitKey(0);
+
         /////////////////////////////////////////////////////////////////////////
         std::string abs_file_name = p.filename().string();
         std::string file_name = abs_file_name.substr(0, abs_file_name.size() - 4) + "\n";
