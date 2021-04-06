@@ -4,7 +4,6 @@ project(retinafacencnnmnetv2)
 add_executable(
         retinafacencnnmnetv2
         FaceDetector.h
-        FaceDetector.cpp
         main.cpp
 )
 find_package(OpenCV REQUIRED)
