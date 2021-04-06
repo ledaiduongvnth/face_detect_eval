@@ -241,20 +241,20 @@ int main() {
         }
         Detect(result, results, img.rows, img.cols, anchor);
 
-        for (int j = 0; j < result.size(); ++j) {
-            cv::Rect rect(result[j].x1/scale, result[j].y1/scale, result[j].x2/scale - result[j].x1/scale, result[j].y2/scale - result[j].y1/scale);
-            cv::rectangle(originImage, rect, cv::Scalar(0, 0, 255), 1, 8, 0);
-            char test[80];
-            sprintf(test, "%f", result[j].s);
-            cv::putText(originImage, test, cv::Size((result[j].x1/scale), result[j].y1/scale), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 255, 255));
-            cv::circle(originImage, cv::Point(result[j].point[0]._x / scale, result[j].point[0]._y / scale), 1, cv::Scalar(0, 0, 225), 4);
-            cv::circle(originImage, cv::Point(result[j].point[1]._x / scale, result[j].point[1]._y / scale), 1, cv::Scalar(0, 255, 225), 4);
-            cv::circle(originImage, cv::Point(result[j].point[2]._x / scale, result[j].point[2]._y / scale), 1, cv::Scalar(255, 0, 225), 4);
-            cv::circle(originImage, cv::Point(result[j].point[3]._x / scale, result[j].point[3]._y / scale), 1, cv::Scalar(0, 255, 0), 4);
-            cv::circle(originImage, cv::Point(result[j].point[4]._x / scale, result[j].point[4]._y / scale), 1, cv::Scalar(255, 0, 0), 4);
-        }
-        cv::imshow("img", originImage);
-        cv::waitKey(0);
+//        for (int j = 0; j < result.size(); ++j) {
+//            cv::Rect rect(result[j].x1/scale, result[j].y1/scale, result[j].x2/scale - result[j].x1/scale, result[j].y2/scale - result[j].y1/scale);
+//            cv::rectangle(originImage, rect, cv::Scalar(0, 0, 255), 1, 8, 0);
+//            char test[80];
+//            sprintf(test, "%f", result[j].s);
+//            cv::putText(originImage, test, cv::Size((result[j].x1/scale), result[j].y1/scale), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 255, 255));
+//            cv::circle(originImage, cv::Point(result[j].point[0]._x / scale, result[j].point[0]._y / scale), 1, cv::Scalar(0, 0, 225), 4);
+//            cv::circle(originImage, cv::Point(result[j].point[1]._x / scale, result[j].point[1]._y / scale), 1, cv::Scalar(0, 255, 225), 4);
+//            cv::circle(originImage, cv::Point(result[j].point[2]._x / scale, result[j].point[2]._y / scale), 1, cv::Scalar(255, 0, 225), 4);
+//            cv::circle(originImage, cv::Point(result[j].point[3]._x / scale, result[j].point[3]._y / scale), 1, cv::Scalar(0, 255, 0), 4);
+//            cv::circle(originImage, cv::Point(result[j].point[4]._x / scale, result[j].point[4]._y / scale), 1, cv::Scalar(255, 0, 0), 4);
+//        }
+//        cv::imshow("img", originImage);
+//        cv::waitKey(0);
 
         /////////////////////////////////////////////////////////////////////////
         std::string abs_file_name = p.filename().string();
