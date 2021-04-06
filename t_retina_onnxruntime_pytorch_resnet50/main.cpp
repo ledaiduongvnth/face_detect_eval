@@ -10,8 +10,6 @@
 #include <onnxruntime_cxx_api.h>
 #include <opencv2/opencv.hpp>
 
-float _nms(0.4), _threshold(0.99);
-
 std::vector<std::string> readLines(const std::string &filename) {
     std::ifstream ifs(filename);
     std::vector<std::string> lines;
@@ -79,7 +77,7 @@ void Detect(std::vector<bbox>& boxes,  std::vector<std::vector<float>> results, 
     // #pragma omp parallel for num_threads(2)
     for (int i = 0; i < anchor.size(); ++i)
     {
-        if (score[indexsco+1] > _threshold)
+        if (score[indexsco+1] > 0.99)
         {
             box tmp = anchor[i];
             box tmp1;
@@ -117,7 +115,7 @@ void Detect(std::vector<bbox>& boxes,  std::vector<std::vector<float>> results, 
     }
 
     std::sort(total_box.begin(), total_box.end(), cmp);
-    nms(total_box, _nms);
+    nms(total_box, 0.4);
 //    printf("Total box %d\n", indexsco);
 
     for (int j = 0; j < total_box.size(); ++j)
