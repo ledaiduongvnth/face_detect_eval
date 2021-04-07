@@ -283,7 +283,7 @@ def evaluation(pred, gt_path, iou_thresh=0.5):
 
 if __name__ == '__main__':
     ground_truth = "ground_truth/"
-    prediction = "t_retina_onnxruntime_pytorch_resnet50/prediction"
+    prediction = "/mnt/hdd/PycharmProjects/face_eval/t_retina_onnxruntime_pytorch_resnet50/prediction"
     evaluation(prediction, ground_truth)
 
 

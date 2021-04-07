@@ -1,0 +1,4 @@
+Retinaface resnet50 onnxruntime without openvino with keeping original image size
+Easy   Val AP: 0.9401156737362524
+Medium Val AP: 0.912515238400633
+Hard   Val AP: 0.7263165349098142

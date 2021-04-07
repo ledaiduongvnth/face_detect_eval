@@ -77,7 +77,7 @@ void Detect(std::vector<bbox>& boxes,  std::vector<std::vector<float>> results, 
     // #pragma omp parallel for num_threads(2)
     for (int i = 0; i < anchor.size(); ++i)
     {
-        if (score[indexsco+1] > 0.99)
+        if (score[indexsco+1] > 0.5)
         {
             box tmp = anchor[i];
             box tmp1;
@@ -171,10 +171,10 @@ int main() {
     Ort::Env env(OrtLoggingLevel::ORT_LOGGING_LEVEL_WARNING);
     Ort::SessionOptions sessionOptions;
     sessionOptions.SetIntraOpNumThreads(1);
-    OrtOpenVINOProviderOptions options;
-    options.device_type = "CPU_FP32";
-    options.num_of_threads = 1;
-    sessionOptions.AppendExecutionProvider_OpenVINO(options);
+//    OrtOpenVINOProviderOptions options;
+//    options.device_type = "CPU_FP32";
+//    options.num_of_threads = 1;
+//    sessionOptions.AppendExecutionProvider_OpenVINO(options);
     sessionOptions.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_DISABLE_ALL);
     Ort::Session session(env, modelFilepath.c_str(), sessionOptions);
     std::vector<const char*> inputNames{"input"};
