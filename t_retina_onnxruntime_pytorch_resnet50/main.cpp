@@ -24,6 +24,23 @@ std::vector<std::string> readLines(const std::string &filename) {
     return lines;
 }
 
+void PreProcess(const cv::Mat &img, cv::Mat& outputImg, float& scale) {
+    float long_side = std::max(img.cols, img.rows);
+    scale = 1600 / long_side;
+    cv::Mat resizedImg;
+    cv::resize(img, resizedImg, cv::Size(), scale, scale,cv::INTER_LINEAR);
+    if (resizedImg.cols > resizedImg.rows) {
+        cv::copyMakeBorder(resizedImg, outputImg, 0, resizedImg.cols - resizedImg.rows, 0, 0,
+                           cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    } else if (resizedImg.cols < resizedImg.rows) {
+        cv::copyMakeBorder(resizedImg, outputImg, 0, 0, 0, resizedImg.rows - resizedImg.cols,
+                           cv::BORDER_CONSTANT, cv::Scalar(0, 0, 0));
+    } else{
+        outputImg = resizedImg;
+    }
+}
+
+
 bool cmp(bbox a, bbox b) {
     if (a.s > b.s)
         return true;
@@ -171,10 +188,10 @@ int main() {
     Ort::Env env(OrtLoggingLevel::ORT_LOGGING_LEVEL_WARNING);
     Ort::SessionOptions sessionOptions;
     sessionOptions.SetIntraOpNumThreads(1);
-//    OrtOpenVINOProviderOptions options;
-//    options.device_type = "CPU_FP32";
-//    options.num_of_threads = 1;
-//    sessionOptions.AppendExecutionProvider_OpenVINO(options);
+    OrtOpenVINOProviderOptions options;
+    options.device_type = "CPU_FP32";
+    options.num_of_threads = 8;
+    sessionOptions.AppendExecutionProvider_OpenVINO(options);
     sessionOptions.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_DISABLE_ALL);
     Ort::Session session(env, modelFilepath.c_str(), sessionOptions);
     std::vector<const char*> inputNames{"input"};
@@ -214,13 +231,15 @@ int main() {
         }
 
         /////////////////////////////////////////////////////////////////////////
+
+        cv::Mat originImage= img.clone();
+        cv::Mat resizedImageBGR, resizedImageRGB, resizedImage, preprocessedImage;
+        float scale = 1;
+        PreProcess(img, img, scale);
         std::vector<box> anchor;
         create_anchor_retinaface(anchor, img.cols, img.rows);
         int anchorsSize = anchor.size();
         std::vector<int> outputDims{anchorsSize*4, anchorsSize*2, anchorsSize*10};
-        cv::Mat originImage= img.clone();
-        cv::Mat resizedImageBGR, resizedImageRGB, resizedImage, preprocessedImage;
-        float scale = 1;
         std::vector<int64_t> inputDims {1, 3, img.rows, img.cols};
         img.convertTo(resizedImage, CV_32F);
         cv::Mat channels[3];
@@ -267,15 +286,6 @@ int main() {
         for (auto box : result) {
             cv::Rect cvbox = cv::Rect(box.x1, box.y1, box.x2 - box.x1, box.y2 - box.y1);
             int x = cvbox.x / scale, y = cvbox.y / scale, w = cvbox.width / scale, h = cvbox.height/scale;
-
-            cv::rectangle(
-                    img,
-                    cv::Point(x, y),
-                    cv::Point(x + w, y + h),
-                    cv::Scalar(0, 0, 255),
-                    2
-            );
-
             float confidence = box.s;
             std::string line =
                     std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(w) + " " + std::to_string(h) +
@@ -283,9 +293,6 @@ int main() {
             myfile <<line;
         }
         myfile.close();
-
-//        cv::imshow("aaa", img);
-//        cv::waitKey(0);
     }
 }
 
