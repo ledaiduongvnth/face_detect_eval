@@ -80,7 +80,6 @@ int main() {
             results.emplace_back(outputi);
         }
         Detect(predictedBoxes, results, img.rows, img.cols, anchor);
-        ShowBoxLandmarkFaces(originImage, predictedBoxes, 1000);
         for (auto &box:predictedBoxes) {
             box.x1 = box.x1 / scale;
             box.y1 = box.y1 / scale;
@@ -91,6 +90,9 @@ int main() {
                 point._y = point._y / scale;
             }
         }
+#ifdef SHOW_IMG
+        ShowBoxLandmarkFaces(originImage, predictedBoxes, 1000);
+#endif
         WriteResultToFile(save_name, predictedBoxes);
     }
 }

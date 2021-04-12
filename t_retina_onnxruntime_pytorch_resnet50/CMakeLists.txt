@@ -4,10 +4,14 @@ project(retinaface-pytorch-onnxruntime-resnet50)
 
 set(ORIGINAL_SIZE OFF)
 set(LOG_TIME ON)
+set(SHOW_IMG OFF)
+
 if (ORIGINAL_SIZE)
     add_definitions(-DORIGINAL_SIZE)
 elseif(LOG_TIME)
     add_definitions(-DLOG_TIME)
+elseif(SHOW_IMG)
+    add_definitions(-DSHOW_IMG)
 endif()
 
 add_executable(
