@@ -3,16 +3,26 @@ cmake_minimum_required(VERSION 3.2)
 project(retinaface-pytorch-onnxruntime-resnet50)
 
 set(ORIGINAL_SIZE ON)
-add_definitions(-DORIGINAL_SIZE)
-
-set(LOG_TIME ON)
-add_definitions(-DLOG_TIME)
-
-set(SHOW_IMG ON)
-add_definitions(-DSHOW_IMG)
-
 set(USE_OPENVINO OFF)
-add_definitions(-DUSE_OPENVINO)
+set(LOG_TIME ON)
+set(SHOW_IMG OFF)
+
+
+if (ORIGINAL_SIZE)
+    add_definitions(-DORIGINAL_SIZE)
+endif()
+
+if (LOG_TIME)
+    add_definitions(-DLOG_TIME)
+endif()
+
+if (SHOW_IMG)
+    add_definitions(-DSHOW_IMG)
+endif ()
+
+if (USE_OPENVINO)
+    add_definitions(-DUSE_OPENVINO)
+endif ()
 
 add_executable(
         retinaface-pytorch-onnxruntime-resnet50
