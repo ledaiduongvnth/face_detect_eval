@@ -21,7 +21,7 @@ int main() {
 #endif
     Ort::Env env(OrtLoggingLevel::ORT_LOGGING_LEVEL_WARNING);
     Ort::SessionOptions sessionOptions;
-    sessionOptions.SetIntraOpNumThreads(1);
+    sessionOptions.SetIntraOpNumThreads(8);
 #ifdef USE_OPENVINO
     OrtOpenVINOProviderOptions options;
     options.device_type = "CPU_FP32";
