@@ -1,13 +1,25 @@
 cmake_minimum_required(VERSION 3.2)
-project(retinafacencnnmnetv2)
+
+project(retinaface-pytorch-onnxruntime-resnet50)
+
+set(ORIGINAL_SIZE OFF)
+set(LOG_TIME ON)
+if (ORIGINAL_SIZE)
+    add_definitions(-DORIGINAL_SIZE)
+elseif(LOG_TIME)
+    add_definitions(-DLOG_TIME)
+endif()
 
 add_executable(
-        retinafacencnnmnetv2
-        FaceDetector.h
+        retinaface-pytorch-onnxruntime-resnet50
         main.cpp
-)
+        FaceDetection.h
+        utils.h)
+
 find_package(OpenCV REQUIRED)
+
 set(CMAKE_PREFIX_PATH /opt/intel/openvino_2021.2.200/deployment_tools/inference_engine/share)
+
 find_package(InferenceEngine REQUIRED)
 
 include_directories(
@@ -21,13 +33,11 @@ include_directories(
 )
 
 target_link_libraries(
-        retinafacencnnmnetv2
+        retinaface-pytorch-onnxruntime-resnet50
         -lboost_filesystem -lboost_system
         ${OpenCV_LIBS}
         -lstdc++fs
-        ${OpenCV_LIBS}
         ${InferenceEngine_LIBRARIES}
-
         /mnt/hdd/CLionProjects/onnxruntime/build/Linux/Release/libonnxruntime.so
         /mnt/hdd/CLionProjects/onnxruntime/build/Linux/Release/libonnxruntime_providers_shared.so
         /mnt/hdd/CLionProjects/onnxruntime/build/Linux/Release/libonnxruntime_providers_openvino.so
