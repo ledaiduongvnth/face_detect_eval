@@ -15,17 +15,19 @@ int main() {
     std::vector<std::string> test_dataset = readLines(tesetset_list);
 
 #ifdef ORIGINAL_SIZE
-    std::string modelFilepath{"../model/fd_resnet50_1600.onnx"};
+    std::string modelFilepath{"../model/fd_resnet50_dynamic.onnx"};
 #else
     std::string modelFilepath{"../model/fd_resnet50_1600.onnx"};
 #endif
     Ort::Env env(OrtLoggingLevel::ORT_LOGGING_LEVEL_WARNING);
     Ort::SessionOptions sessionOptions;
     sessionOptions.SetIntraOpNumThreads(1);
+#ifdef USE_OPENVINO
     OrtOpenVINOProviderOptions options;
     options.device_type = "CPU_FP32";
     options.num_of_threads = 8;
     sessionOptions.AppendExecutionProvider_OpenVINO(options);
+#endif
     sessionOptions.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_DISABLE_ALL);
     Ort::Session session(env, modelFilepath.c_str(), sessionOptions);
     std::vector<const char*> inputNames{"input"};
