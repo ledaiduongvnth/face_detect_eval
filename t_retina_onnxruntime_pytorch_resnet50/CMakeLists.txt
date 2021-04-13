@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.2)
 
 project(retinaface-pytorch-onnxruntime-resnet50)
 
-set(ORIGINAL_SIZE ON)
-set(USE_OPENVINO OFF)
+set(ORIGINAL_SIZE OFF)
+set(USE_OPENVINO ON)
 set(LOG_TIME ON)
 set(SHOW_IMG OFF)
 
@@ -27,8 +27,10 @@ endif ()
 add_executable(
         retinaface-pytorch-onnxruntime-resnet50
         main.cpp
-        FaceDetection.h
-        utils.h)
+        /mnt/hdd/CLionProjects/frvt1N/1N/src/vtsimp/src/FaceRecognition.h
+        /mnt/hdd/CLionProjects/frvt1N/1N/src/vtsimp/src/FaceDetectionUtils.h
+        utils.h
+)
 
 find_package(OpenCV REQUIRED)
 
@@ -52,7 +54,7 @@ target_link_libraries(
         ${OpenCV_LIBS}
         -lstdc++fs
         ${InferenceEngine_LIBRARIES}
-        /mnt/hdd/CLionProjects/onnxruntime/build/Linux/Release/libonnxruntime.so
-        /mnt/hdd/CLionProjects/onnxruntime/build/Linux/Release/libonnxruntime_providers_shared.so
-        /mnt/hdd/CLionProjects/onnxruntime/build/Linux/Release/libonnxruntime_providers_openvino.so
+        /mnt/hdd/CLionProjects/frvt1N/1N/lib/onnxruntime-linux-x64-1.7.0-openvino/lib/libonnxruntime.so
+        /mnt/hdd/CLionProjects/frvt1N/1N/lib/onnxruntime-linux-x64-1.7.0-openvino/lib/libonnxruntime_providers_shared.so
+        /mnt/hdd/CLionProjects/frvt1N/1N/lib/onnxruntime-linux-x64-1.7.0-openvino/lib/libonnxruntime_providers_openvino.so
 )

@@ -4,7 +4,8 @@
 #include <vector>
 #include <fstream>
 #include <boost/filesystem/path.hpp>
-
+#include "opencv2/opencv.hpp"
+#include "../../../CLionProjects/frvt1N/1N/src/vtsimp/src/FaceRecognition.h"
 
 class Timer {
 public:
@@ -44,22 +45,6 @@ std::vector<std::string> readLines(const std::string &filename) {
     return lines;
 }
 
-void ShowBoxLandmarkFaces(cv::Mat img, std::vector<bbox> boxes, int delay){
-    for (int j = 0; j < boxes.size(); ++j) {
-        cv::Rect rect(boxes[j].x1 , boxes[j].y1 , boxes[j].x2  - boxes[j].x1 , boxes[j].y2  - boxes[j].y1 );
-        cv::rectangle(img, rect, cv::Scalar(0, 0, 255), 1, 8, 0);
-        char test[80];
-        sprintf(test, "%f", boxes[j].s);
-        cv::putText(img, test, cv::Size((boxes[j].x1 ), boxes[j].y1 ), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 255, 255));
-        cv::circle(img, cv::Point(boxes[j].point[0]._x , boxes[j].point[0]._y ), 1, cv::Scalar(0, 0, 225), 4);
-        cv::circle(img, cv::Point(boxes[j].point[1]._x , boxes[j].point[1]._y ), 1, cv::Scalar(0, 255, 225), 4);
-        cv::circle(img, cv::Point(boxes[j].point[2]._x , boxes[j].point[2]._y ), 1, cv::Scalar(255, 0, 225), 4);
-        cv::circle(img, cv::Point(boxes[j].point[3]._x , boxes[j].point[3]._y ), 1, cv::Scalar(0, 255, 0), 4);
-        cv::circle(img, cv::Point(boxes[j].point[4]._x , boxes[j].point[4]._y ), 1, cv::Scalar(255, 0, 0), 4);
-    }
-    cv::imshow("img", img);
-    cv::waitKey(delay);
-}
 
 void WriteResultToFile(std::string& save_name, std::vector<bbox> predictedBoxes){
     std::ofstream myfile;
