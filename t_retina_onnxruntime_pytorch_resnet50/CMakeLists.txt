@@ -5,7 +5,7 @@ project(retinaface-pytorch-onnxruntime-resnet50)
 set(ORIGINAL_SIZE OFF)
 set(USE_OPENVINO ON)
 set(LOG_TIME ON)
-set(SHOW_IMG OFF)
+set(SHOW_IMG ON)
 
 
 if (ORIGINAL_SIZE)
@@ -27,8 +27,8 @@ endif ()
 add_executable(
         retinaface-pytorch-onnxruntime-resnet50
         main.cpp
-        /mnt/hdd/CLionProjects/frvt1N/1N/src/vtsimp/src/FaceRecognition.h
-        /mnt/hdd/CLionProjects/frvt1N/1N/src/vtsimp/src/FaceDetectionUtils.h
+        /mnt/hdd/CLionProjects/face-common/FaceRecognizer.cpp
+        /mnt/hdd/CLionProjects/face-common/aligner.cpp
         utils.h
 )
 
@@ -46,6 +46,7 @@ include_directories(
         ${OpenCV_INCLUDE_DIRS}
         ${InferenceEngine_INCLUDE_DIRS}
         /mnt/hdd/CLionProjects/onnxruntime/include/onnxruntime/core/session
+        /mnt/hdd/CLionProjects/face-common
 )
 
 target_link_libraries(

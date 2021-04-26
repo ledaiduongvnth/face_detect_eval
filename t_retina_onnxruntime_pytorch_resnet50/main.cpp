@@ -34,9 +34,9 @@ int main() {
             bool isCreated = boost::filesystem::create_directories(dirname);
             printf("%s is created: %s\n", dirname.c_str(), std::to_string(isCreated).c_str());
         }
-        std::vector<bbox> outputBoxes;
+        std::vector<Box> outputBoxes;
         cv::Mat detectImg = img.clone();
-        faceRecognizer.Detect(detectImg, outputBoxes, false);
+        outputBoxes = faceRecognizer.Detect(detectImg, false);
         WriteResultToFile(save_name, outputBoxes);
     }
 }

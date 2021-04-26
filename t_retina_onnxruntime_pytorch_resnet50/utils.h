@@ -5,7 +5,7 @@
 #include <fstream>
 #include <boost/filesystem/path.hpp>
 #include "opencv2/opencv.hpp"
-#include "../../../CLionProjects/frvt1N/1N/src/vtsimp/src/FaceRecognition.h"
+#include "/mnt/hdd/CLionProjects/face-common/FaceRecognizer.h"
 
 class Timer {
 public:
@@ -46,7 +46,7 @@ std::vector<std::string> readLines(const std::string &filename) {
 }
 
 
-void WriteResultToFile(std::string& save_name, std::vector<bbox> predictedBoxes){
+void WriteResultToFile(std::string& save_name, std::vector<Box> predictedBoxes){
     std::ofstream myfile;
     boost::filesystem::path p(save_name);
     std::string abs_file_name = p.filename().string();
@@ -59,7 +59,7 @@ void WriteResultToFile(std::string& save_name, std::vector<bbox> predictedBoxes)
     for (auto box : predictedBoxes) {
         cv::Rect cvbox = cv::Rect(box.x1, box.y1, box.x2 - box.x1, box.y2 - box.y1);
         int x = cvbox.x , y = cvbox.y , w = cvbox.width , h = cvbox.height;
-        float confidence = box.s;
+        float confidence = box.confident;
         std::string line =
                 std::to_string(x) + " " + std::to_string(y) + " " + std::to_string(w) + " " + std::to_string(h) +
                 " " + std::to_string(confidence) + " \n";
