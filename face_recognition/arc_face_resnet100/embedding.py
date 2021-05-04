@@ -7,6 +7,7 @@ import datetime
 from skimage import transform as trans
 import sklearn
 from sklearn import preprocessing
+import face_common as face_common
 
 class Embedding:
   def __init__(self, prefix, epoch, ctx_id=0):
@@ -29,34 +30,23 @@ class Embedding:
       [62.7299, 92.2041] ], dtype=np.float32 )
     src[:,0] += 8.0
     self.src = src
+    self.face_recognizer = face_common.FaceRecognizer(
+      True,
+      "/mnt/hdd/PycharmProjects/face_eval/face_detection/t_retina_onnxruntime_pytorch_resnet50/model/fd_resnet50_1600.onnx",
+      True,
+      "/mnt/hdd/CLionProjects/frvt1N/1N/config/model.onnx"
+    )
 
   def get(self, rimg, landmark):
     assert landmark.shape[0]==68 or landmark.shape[0]==5
     assert landmark.shape[1]==2
-    if landmark.shape[0]==68:
-      landmark5 = np.zeros( (5,2), dtype=np.float32 )
-      landmark5[0] = (landmark[36]+landmark[39])/2
-      landmark5[1] = (landmark[42]+landmark[45])/2
-      landmark5[2] = landmark[30]
-      landmark5[3] = landmark[48]
-      landmark5[4] = landmark[54]
+    feature1 = self.face_recognizer.Process(rimg)
+    img_flip = np.fliplr(rimg)
+    feature2 = self.face_recognizer.Process(img_flip)
+    if len(feature1) == 512 and len(feature2) == 512:
+      feature1.extend(feature2)
+      result_feature = np.array(feature1)
     else:
-      landmark5 = landmark
-    tform = trans.SimilarityTransform()
-    tform.estimate(landmark5, self.src)
-    M = tform.params[0:2,:]
-    img = cv2.warpAffine(rimg,M,(self.image_size[1],self.image_size[0]), borderValue = 0.0)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img_flip = np.fliplr(img)
-    img = np.transpose(img, (2,0,1)) #3*112*112, RGB
-    img_flip = np.transpose(img_flip,(2,0,1))
-    input_blob = np.zeros((2, 3, self.image_size[1], self.image_size[0]),dtype=np.uint8)
-    input_blob[0] = img
-    input_blob[1] = img_flip
-    data = mx.nd.array(input_blob)
-    db = mx.io.DataBatch(data=(data,))
-    self.model.forward(db, is_train=False)
-    feat = self.model.get_outputs()[0].asnumpy()
-    feat = feat.reshape([-1, feat.shape[0] * feat.shape[1]])
-    feat = feat.flatten()
-    return feat
+      result_feature = np.random.rand(1024)
+    assert result_feature.size == 1024
+    return result_feature

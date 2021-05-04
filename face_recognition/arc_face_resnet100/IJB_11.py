@@ -16,7 +16,6 @@ from sklearn import preprocessing
 import cv2
 import sys
 import glob
-# sys.path.append('/mnt/hdd/face-ijb/IJB_release/recognition')
 from embedding import Embedding
 from menpo.visualize import print_progress
 from menpo.visualize.viewmatplotlib import sample_colours_from_colourmap
@@ -37,6 +36,7 @@ parser.add_argument('--target',
                     type=str,
                     help='target, set to IJBC or IJBB')
 args = parser.parse_args()
+data_path = "/mnt/hdd/PycharmProjects/insightface/evaluation/IJB"
 
 target = args.target
 model_path = args.model_prefix
@@ -224,7 +224,7 @@ assert target == 'IJBC' or target == 'IJBB'
 # =============================================================
 start = timeit.default_timer()
 templates, medias = read_template_media_list(
-    os.path.join('%s/meta' % target, '%s_face_tid_mid.txt' % target.lower()))
+    os.path.join(data_path, '%s/meta' % target, '%s_face_tid_mid.txt' % target.lower()))
 stop = timeit.default_timer()
 print('Time: %.2f s. ' % (stop - start))
 
@@ -238,7 +238,7 @@ print('Time: %.2f s. ' % (stop - start))
 # =============================================================
 start = timeit.default_timer()
 p1, p2, label = read_template_pair_list(
-    os.path.join('%s/meta' % target,
+    os.path.join(data_path, '%s/meta' % target,
                  '%s_template_pair_label.txt' % target.lower()))
 stop = timeit.default_timer()
 print('Time: %.2f s. ' % (stop - start))
@@ -253,8 +253,8 @@ print('Time: %.2f s. ' % (stop - start))
 #           img_feats: [image_num x feats_dim] (227630, 512)
 # =============================================================
 start = timeit.default_timer()
-img_path = './%s/loose_crop' % target
-img_list_path = './%s/meta/%s_name_5pts_score.txt' % (target, target.lower())
+img_path = os.path.join(data_path, './%s/loose_crop' % target)
+img_list_path = os.path.join(data_path, './%s/meta/%s_name_5pts_score.txt' % (target, target.lower()))
 img_feats, faceness_scores = get_image_feature(img_path, img_list_path,
                                                model_path, epoch, gpu_id)
 stop = timeit.default_timer()

@@ -4,7 +4,7 @@ import cv2
 img = cv2.imread("/mnt/hdd/PycharmProjects/Pytorch_Retinaface/curve/test.jpg")
 face_recognizer = face_common.FaceRecognizer(
     True,
-    "/mnt/hdd/PycharmProjects/face_eval/t_retina_onnxruntime_pytorch_resnet50/model/fd_resnet50_1600.onnx",
+    "/mnt/hdd/PycharmProjects/face_eval/face_detection/t_retina_onnxruntime_pytorch_resnet50/model/fd_resnet50_1600.onnx",
     True,
     "/mnt/hdd/CLionProjects/frvt1N/1N/config/model.onnx"
 )
