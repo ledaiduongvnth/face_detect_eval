@@ -28,7 +28,7 @@ if __name__ == '__main__':
         results = face_recognizer.Detect(img, False, False)
         dets = []
         for result in results:
-            dets.append([result.x1, result.y1, result.x2, result.y2, 1])
+            dets.append([result.x1, result.y1, result.x2, result.y2, result.confident])
         dets = np.array(dets)
         ############################################################################################
         save_name = save_folder + img_name[:-4] + ".txt"
