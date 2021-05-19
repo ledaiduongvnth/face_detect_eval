@@ -1,4 +1,6 @@
 import argparse
+import os.path
+
 import cv2
 import numpy as np
 import sys
@@ -8,6 +10,7 @@ from skimage import transform as trans
 import sklearn
 from sklearn import preprocessing
 import face_common as face_common
+import time
 
 class Embedding:
   def __init__(self, prefix, epoch, ctx_id=0):
@@ -60,6 +63,8 @@ class Embedding:
                                ])
     else:
       print("Cannot detect faces")
+      save_path = os.path.join("/mnt/hdd/cannot_detect_face", str(int(time.time())) + ".png")
+      cv2.imwrite(save_path, rimg)
 
     # cv2.circle(rimg, (int(landmark_vts[0][0]), int(landmark_vts[0][1])), 1, (255, 0, 0), 4)
     # cv2.circle(rimg, (int(landmark5[0][0]), int(landmark5[0][1])), 1, (0, 0, 255), 4)
