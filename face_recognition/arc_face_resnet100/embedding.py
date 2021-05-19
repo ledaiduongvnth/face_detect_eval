@@ -4,7 +4,7 @@ import os.path
 import cv2
 import numpy as np
 import sys
-import mxnet as mx
+# import mxnet as mx
 import datetime
 from skimage import transform as trans
 import sklearn
@@ -35,9 +35,9 @@ class Embedding:
     self.src = src
     self.face_recognizer = face_common.FaceRecognizer(
       True,
-      "/mnt/hdd/PycharmProjects/face_eval/face_detection/t_retina_onnxruntime_pytorch_resnet50/model/fd_resnet50_1600.onnx",
+      "models/fd_resnet50_1600.onnx",
       True,
-      "/mnt/hdd/CLionProjects/frvt1N/1N/config/model.onnx"
+      "models/model.onnx"
     )
 
   def get(self, rimg, landmark):
