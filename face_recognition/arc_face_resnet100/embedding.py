@@ -63,8 +63,8 @@ class Embedding:
                                ])
     else:
       print("Cannot detect faces")
-      save_path = os.path.join("/mnt/hdd/cannot_detect_face", str(int(time.time())) + ".png")
-      cv2.imwrite(save_path, rimg)
+      # save_path = os.path.join("/mnt/hdd/cannot_detect_face", str(int(time.time())) + ".png")
+      # cv2.imwrite(save_path, rimg)
 
     # cv2.circle(rimg, (int(landmark_vts[0][0]), int(landmark_vts[0][1])), 1, (255, 0, 0), 4)
     # cv2.circle(rimg, (int(landmark5[0][0]), int(landmark5[0][1])), 1, (0, 0, 255), 4)
@@ -80,7 +80,7 @@ class Embedding:
 
     img_flip = np.fliplr(img)
     feature1 = self.face_recognizer.Recognize(img)
-    feature2 = self.face_recognizer.Process(img_flip)
+    feature2 = self.face_recognizer.Recognize(img_flip)
     if len(feature1) == 512 and len(feature2) == 512:
       feature1.extend(feature2)
       result_feature = np.array(feature1)
