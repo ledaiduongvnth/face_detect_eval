@@ -8,3 +8,8 @@ With resize 1600-1600, threshold = 0.02
 Easy   Val AP: 0.9505723515928443
 Medium Val AP: 0.9390175417864801
 Hard   Val AP: 0.8801830557389726
+
+With padding to keep origin size for images have longside <= 1600 and resize to 1600 with other images, threshold = 0.02
+Easy   Val AP: 0.953300419184638
+Medium Val AP: 0.938323044227043
+Hard   Val AP: 0.8409832015013483
