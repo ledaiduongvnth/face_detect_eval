@@ -4,7 +4,7 @@ import os.path
 import cv2
 import numpy as np
 import sys
-import mxnet as mx
+# import mxnet as mx
 import datetime
 from skimage import transform as trans
 import sklearn
@@ -35,9 +35,9 @@ class Embedding:
     self.src = src
     self.face_recognizer = face_common.FaceRecognizer(
       True,
-      "/mnt/hdd/PycharmProjects/face_eval/face_detection/t_retina_onnxruntime_pytorch_resnet50/model/fd_resnet50_1600.onnx",
+      "models/fd_resnet50_1600.onnx",
       True,
-      "/mnt/hdd/CLionProjects/frvt1N/1N/config/model.onnx"
+      "models/model.onnx"
     )
 
   def get(self, rimg, landmark):
@@ -63,8 +63,8 @@ class Embedding:
                                ])
     else:
       print("Cannot detect faces")
-      save_path = os.path.join("/mnt/hdd/cannot_detect_face", str(int(time.time())) + ".png")
-      cv2.imwrite(save_path, rimg)
+      # save_path = os.path.join("/mnt/hdd/cannot_detect_face", str(int(time.time())) + ".png")
+      # cv2.imwrite(save_path, rimg)
 
     # cv2.circle(rimg, (int(landmark_vts[0][0]), int(landmark_vts[0][1])), 1, (255, 0, 0), 4)
     # cv2.circle(rimg, (int(landmark5[0][0]), int(landmark5[0][1])), 1, (0, 0, 255), 4)
@@ -80,7 +80,7 @@ class Embedding:
 
     img_flip = np.fliplr(img)
     feature1 = self.face_recognizer.Recognize(img)
-    feature2 = self.face_recognizer.Process(img_flip)
+    feature2 = self.face_recognizer.Recognize(img_flip)
     if len(feature1) == 512 and len(feature2) == 512:
       feature1.extend(feature2)
       result_feature = np.array(feature1)
