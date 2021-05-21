@@ -36,7 +36,7 @@ parser.add_argument('--target',
                     type=str,
                     help='target, set to IJBC or IJBB')
 args = parser.parse_args()
-data_path = "/hdd/IJB"
+data_path = "/mnt/hdd/PycharmProjects/insightface/evaluation/IJB"
 
 target = args.target
 model_path = args.model_prefix
