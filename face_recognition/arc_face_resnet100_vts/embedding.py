@@ -35,9 +35,10 @@ class Embedding:
     self.src = src
     self.face_recognizer = face_common.FaceRecognizer(
       True,
-      "models/fd_resnet50_1600.onnx",
+      "models/fd_resnet50_480.onnx",
+      480, 0.5,
       True,
-      "models/model.onnx"
+      "models/glint360k_cosface_r100_fp16_0.1.onnx"
     )
 
   def get(self, rimg, landmark):
@@ -63,8 +64,8 @@ class Embedding:
                                ])
     else:
       print("Cannot detect faces")
-      # save_path = os.path.join("/mnt/hdd/cannot_detect_face", str(int(time.time())) + ".png")
-      # cv2.imwrite(save_path, rimg)
+      save_path = os.path.join("/mnt/hdd/cannot_detect_face_retina_resnet_50_pytorch_480", str(int(time.time())) + ".png")
+      cv2.imwrite(save_path, rimg)
 
     # cv2.circle(rimg, (int(landmark_vts[0][0]), int(landmark_vts[0][1])), 1, (255, 0, 0), 4)
     # cv2.circle(rimg, (int(landmark5[0][0]), int(landmark5[0][1])), 1, (0, 0, 255), 4)
