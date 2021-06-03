@@ -10,7 +10,8 @@ dataset_folder = "../widerface_val/images/"
 if __name__ == '__main__':
     face_recognizer = face_common.FaceRecognizer(
         True,
-        "model/fd_resnet50_1600.onnx",
+        "model/fd_resnet50_480.onnx",
+        480, 0.02,
         False,
         ""
     )
