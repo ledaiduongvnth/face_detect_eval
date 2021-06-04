@@ -36,9 +36,9 @@ class Embedding:
     self.face_recognizer = face_common.FaceRecognizer(
       True,
       "models/fd_resnet50_480.onnx",
-      480, 0.5,
+      480, 0.02,
       True,
-      "models/glint360k_cosface_r100_fp16_0.1.onnx"
+      "models/model.onnx"
     )
 
   def get(self, rimg, landmark):
