@@ -8,7 +8,7 @@ save_folder = "./prediction/"
 dataset_folder = "../widerface_val/images/"
 
 if __name__ == '__main__':
-    detector = SCRFD(model_file='/home/d/Downloads/scrfd_10g_bnkps.onnx')
+    detector = SCRFD(model_file='model/scrfd_10g_bnkps.onnx')
     detector.prepare(-1)
     # face_recognizer = face_common.FaceRecognizer(
     #     True,
