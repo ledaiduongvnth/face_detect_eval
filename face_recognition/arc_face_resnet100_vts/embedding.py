@@ -35,7 +35,7 @@ class Embedding:
     src[:,0] += 8.0
     self.src = src
     self.face_recognizer = face_common.FaceRecognizer(
-      True,
+      False,
       "models/fd_resnet50_480.onnx",
       480, 0.02,
       True,
@@ -58,7 +58,7 @@ class Embedding:
       landmark5 = landmark
 
     # boxes = self.face_recognizer.Detect(rimg, False, True)
-    bboxes, kpss = self.detector.detect(rimg, 0.02, input_size=(640, 640))
+    bboxes, kpss = self.detector.detect(rimg, 0.3, input_size=(320, 320))
 
     if len(bboxes) >= 1:
       scores = [bbox[-1] for bbox in bboxes]
@@ -67,7 +67,7 @@ class Embedding:
 
     else:
       print("Cannot detect faces")
-      save_path = os.path.join("/mnt/hdd/cannot_detect_face_retina_resnet_50_pytorch_480", str(int(time.time())) + ".png")
+      save_path = os.path.join("/mnt/hdd/cannot_detect_face", str(int(time.time())) + ".png")
       cv2.imwrite(save_path, rimg)
 
     # cv2.circle(rimg, (int(landmark_vts[0][0]), int(landmark_vts[0][1])), 1, (255, 0, 0), 4)
