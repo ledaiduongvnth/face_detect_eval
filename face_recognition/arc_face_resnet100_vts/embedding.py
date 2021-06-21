@@ -11,6 +11,7 @@ import sklearn
 from sklearn import preprocessing
 import face_common as face_common
 import time
+from scrfd import SCRFD
 
 class Embedding:
   def __init__(self, prefix, epoch, ctx_id=0):
@@ -40,6 +41,8 @@ class Embedding:
       True,
       "models/model.onnx"
     )
+    self.detector = SCRFD(model_file='/mnt/hdd/PycharmProjects/face_eval/face_detection/t_srcfd/model/scrfd_10g_bnkps.onnx')
+    self.detector.prepare(-1)
 
   def get(self, rimg, landmark):
     assert landmark.shape[0]==68 or landmark.shape[0]==5
@@ -54,14 +57,14 @@ class Embedding:
     else:
       landmark5 = landmark
 
-    boxes = self.face_recognizer.Detect(rimg, False, True)
-    if len(boxes) == 1:
-      landmark5 = np.array([[int(boxes[0].landmarks[0].x), int(boxes[0].landmarks[0].y)],
-                               [int(boxes[0].landmarks[1].x), int(boxes[0].landmarks[1].y)],
-                               [int(boxes[0].landmarks[2].x), int(boxes[0].landmarks[2].y)],
-                               [int(boxes[0].landmarks[3].x), int(boxes[0].landmarks[3].y)],
-                               [int(boxes[0].landmarks[4].x), int(boxes[0].landmarks[4].y)]
-                               ])
+    # boxes = self.face_recognizer.Detect(rimg, False, True)
+    bboxes, kpss = self.detector.detect(rimg, 0.02, input_size=(640, 640))
+
+    if len(bboxes) >= 1:
+      scores = [bbox[-1] for bbox in bboxes]
+      max_index = np.argmax(scores)
+      landmark5 = kpss[max_index]
+
     else:
       print("Cannot detect faces")
       save_path = os.path.join("/mnt/hdd/cannot_detect_face_retina_resnet_50_pytorch_480", str(int(time.time())) + ".png")
