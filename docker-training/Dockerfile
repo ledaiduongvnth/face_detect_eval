@@ -22,4 +22,4 @@ RUN apt-get update && apt-get install -y python3-pip python3-opencv
 RUN pip3 install -r requirements.txt
 
 # Set the default command to python3
-CMD ["python3 /app/train.py"]
+#CMD ["python3 /app/train.py"]

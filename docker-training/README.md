@@ -10,9 +10,15 @@ docker run -it --init \
   iva-training bash
 
 ### Run docker image with default command
-docker run -it --init \
+docker run -it \
+  -d \
+  --name=iva-training-container \
+  --init \
   --gpus=all \
   --ipc=host \
   --user="$(id -u):$(id -g)" \
   --volume="$PWD:/app" \
-  iva-training
+  iva-training python3 train.py
+
+### Get log from container 
+docker logs iva-training-container
