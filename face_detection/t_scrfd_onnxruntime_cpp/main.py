@@ -9,7 +9,7 @@ dataset_folder = "../widerface_val/images/"
 if __name__ == '__main__':
     face_recognizer = face_common.FaceRecognizer(
         True,
-        "model/scrfd_10g_bnkps.onnx",
+        "model/scrfd_10g_bnkps_shape640x640.onnx",
         640, 0.02,
         False,
         ""
