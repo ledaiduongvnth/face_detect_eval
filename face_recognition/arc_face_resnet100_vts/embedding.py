@@ -35,7 +35,7 @@ class Embedding:
     self.src = src
     self.face_recognizer = face_common.FaceRecognizer(
       True,
-      "/mnt/hdd/PycharmProjects/face_eval/face_detection/t_scrfd_onnxruntime_cpp/model/scrfd_10g_bnkps_shape640x640.onnx",
+      "/mnt/hdd/PycharmProjects/face_eval/face_detection/t_scrfd_onnxruntime_cpp/model/scrfd_10g_bnkps.onnx",
       640, 0.02,
       True,
       "models/model.onnx"
