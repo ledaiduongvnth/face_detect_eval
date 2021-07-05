@@ -36,7 +36,7 @@ class Embedding:
     self.face_recognizer = face_common.FaceRecognizer(
       True,
       "/mnt/hdd/PycharmProjects/face_eval/face_detection/t_scrfd_onnxruntime_cpp/model/scrfd_10g_bnkps.onnx",
-      640, 0.02,
+      320, 0.02,
       True,
       "models/model.onnx"
     )
@@ -54,6 +54,7 @@ class Embedding:
     else:
       landmark5 = landmark
 
+    # cv2.circle(rimg, (int(landmark5[0][0]), int(landmark5[0][1])), 1, (0, 0, 255), 4)
     boxes = self.face_recognizer.Detect(rimg, False, True)
     if len(boxes) == 1:
       landmark5 = np.array([[int(boxes[0].landmarks[0].x), int(boxes[0].landmarks[0].y)],
@@ -62,13 +63,16 @@ class Embedding:
                                [int(boxes[0].landmarks[3].x), int(boxes[0].landmarks[3].y)],
                                [int(boxes[0].landmarks[4].x), int(boxes[0].landmarks[4].y)]
                                ])
+      # cv2.circle(rimg, (int(landmark5[0][0]), int(landmark5[0][1])), 1, (0, 255, 0), 4)
+
     else:
       print("Cannot detect faces")
-      save_path = os.path.join("/mnt/hdd/cannot_detect_face_retina_resnet_50_pytorch_480", str(int(time.time())) + ".png")
+      save_path = os.path.join("/mnt/hdd/cannot_detect_face", str(int(time.time())) + ".png")
       cv2.imwrite(save_path, rimg)
 
-    # cv2.circle(rimg, (int(landmark_vts[0][0]), int(landmark_vts[0][1])), 1, (255, 0, 0), 4)
-    # cv2.circle(rimg, (int(landmark5[0][0]), int(landmark5[0][1])), 1, (0, 0, 255), 4)
+    # cv2.imshow("rimg", rimg)
+    # cv2.waitKey(2000)
+    # cv2.destroyAllWindows()
 
     tform = trans.SimilarityTransform()
     tform.estimate(landmark5, self.src)
