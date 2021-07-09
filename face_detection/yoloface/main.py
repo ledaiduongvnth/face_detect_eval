@@ -9,8 +9,8 @@ dataset_folder = "../widerface_val/images/"
 if __name__ == '__main__':
     face_recognizer = face_common.FaceRecognizer(
         True,
-        "model/yolov5m-face.onnx",
-        640, 0.02,
+        "model/yolov5s-face640x640.onnx",
+        640, 0.02, 0.5,
         False,
         ""
     )
