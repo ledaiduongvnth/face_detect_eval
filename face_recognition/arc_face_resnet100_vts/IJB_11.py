@@ -36,7 +36,7 @@ parser.add_argument('--target',
                     type=str,
                     help='target, set to IJBC or IJBB')
 args = parser.parse_args()
-data_path = "/media/ubuntu/DATA/duongld12/IJB"
+data_path = "/mnt/hdd/IJB"
 
 target = args.target
 model_path = args.model_prefix

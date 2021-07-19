@@ -35,10 +35,10 @@ class Embedding:
     self.src = src
     self.face_recognizer = face_common.FaceRecognizer(
       True,
-      "models/yolov5m-face480x480.onnx",
+      "/mnt/hdd/CLionProjects/frvt1N/1N/config/retinaface_resnet50_480x480.onnx",
       480, 0.0, 0.4,
       True,
-      "models/model.onnx"
+      "/mnt/hdd/CLionProjects/frvt1N/1N/config/glint360k0.1.onnx"
     )
 
   def get(self, rimg, landmark):
