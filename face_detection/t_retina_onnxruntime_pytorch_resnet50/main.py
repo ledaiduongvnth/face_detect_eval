@@ -11,7 +11,7 @@ if __name__ == '__main__':
     face_recognizer = face_common.FaceRecognizer(
         True,
         "model/retinaface_resnet50_480x480.onnx",
-        480, 0.02,
+        480, 0.02, 0.4,
         False,
         ""
     )
