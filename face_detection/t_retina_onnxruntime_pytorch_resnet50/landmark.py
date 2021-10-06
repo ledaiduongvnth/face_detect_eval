@@ -33,7 +33,8 @@ face_recognizer = face_common.FaceRecognizer(
     "model/retinaface_resnet50_480x480.onnx",
     480, 0.02, 0.4,
     False,
-    ""
+    "",
+    0
 )
 
 result = 0
