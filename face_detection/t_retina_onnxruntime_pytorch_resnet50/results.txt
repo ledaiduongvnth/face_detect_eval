@@ -13,3 +13,7 @@ With padding to keep origin size for images have longside <= 1600 and resize to 
 Easy   Val AP: 0.953300419184638
 Medium Val AP: 0.938323044227043
 Hard   Val AP: 0.8409832015013483
+
+Model submit Nist 06/2021 size = 480, threshold = 0, face landmark evaluation:
+This is NMELoss: 0.10347408136480883
+
