@@ -1,3 +1,7 @@
+size = 640
 Easy   Val AP: 0.9496258105733931
 Medium Val AP: 0.9355452178904832
 Hard   Val AP: 0.819960939349325
+
+size = 640, threshold = 0, face landmark evaluation:
+This is NMELoss: 0.18815794587561416
