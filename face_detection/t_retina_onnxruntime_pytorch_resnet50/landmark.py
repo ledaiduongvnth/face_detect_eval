@@ -11,8 +11,9 @@ import face_common
 def NMELoss(predicted_landmark, target_landmark):
     # landmark is a numpy array which has shape [5, 2]
     num_face_landmark = 5
-    leye_reye_vec = torch.from_numpy(target_landmark[0] - target_landmark[1])
-    inter_occular_distance = LA.norm(leye_reye_vec)
+    leye_nouse_vec = torch.from_numpy(target_landmark[0] - target_landmark[2])
+    reye_nouse_vec = torch.from_numpy(target_landmark[1] - target_landmark[2])
+    inter_occular_distance = LA.norm(leye_nouse_vec) + LA.norm(reye_nouse_vec)
     loss = nn.MSELoss(reduction="sum")
     preloss = loss(torch.from_numpy(predicted_landmark), torch.from_numpy(target_landmark))
     nme_loss = torch.sqrt(preloss) / (inter_occular_distance * num_face_landmark)
@@ -31,7 +32,7 @@ print('files:', len(files))
 face_recognizer = face_common.FaceRecognizer(
     True,
     "model/retinaface_resnet50_480x480.onnx",
-    480, 0.02, 0.4,
+    480, 0.01, 0.4,
     False,
     "",
     0
