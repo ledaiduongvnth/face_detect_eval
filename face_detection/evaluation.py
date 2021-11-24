@@ -283,7 +283,7 @@ def evaluation(pred, gt_path, iou_thresh=0.5):
 
 if __name__ == '__main__':
     ground_truth = "ground_truth/"
-    prediction = "/mnt/hdd/PycharmProjects/face_eval/face_detection/yoloface/prediction"
+    prediction = "/mnt/hdd/PycharmProjects/Retinaface/wout"
     evaluation(prediction, ground_truth)
 
 

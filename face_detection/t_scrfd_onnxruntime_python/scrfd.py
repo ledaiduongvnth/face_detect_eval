@@ -104,19 +104,29 @@ class SCRFD:
         self.use_kps = False
         self._anchor_ratio = 1.0
         self._num_anchors = 1
+        # this feature stride fpn used for scrfd without landmark
         if len(outputs)==6:
             self.fmc = 3
             self._feat_stride_fpn = [8, 16, 32]
             self._num_anchors = 2
+        # this feature stride fpn used for scrfd with landmark
         elif len(outputs)==9:
             self.fmc = 3
             self._feat_stride_fpn = [8, 16, 32]
             self._num_anchors = 2
             self.use_kps = True
+
+        # So retinaface has just 1 anchor box
+        #
+        # but scrfd has 2 anchor box according to
+        # ratio = [1.0] and scales = [1, 2]
+
+        # this is feature stride fpn is used for retinaface without landmark
         elif len(outputs)==10:
             self.fmc = 5
             self._feat_stride_fpn = [8, 16, 32, 64, 128]
             self._num_anchors = 1
+        # this feature stride fpn is used for retinaface only
         elif len(outputs)==15:
             self.fmc = 5
             self._feat_stride_fpn = [8, 16, 32, 64, 128]

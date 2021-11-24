@@ -23,10 +23,11 @@ from prettytable import PrettyTable
 from pathlib import Path
 import warnings
 warnings.filterwarnings("ignore")
+import numpy as np
 
 parser = argparse.ArgumentParser(description='do ijb test')
 # general
-parser.add_argument('--model-prefix', default='/home/d/Downloads/model', help='path to load model.')
+parser.add_argument('--model-prefix', default='/home/d/Downloads/Telegram Desktop/face_and_utvm_models/face_models/arc_face/model', help='path to load model.')
 parser.add_argument('--model-epoch', default=1, type=int, help='')
 parser.add_argument('--gpu', default=0, type=int, help='gpu id')
 parser.add_argument('--batch-size', default=32, type=int, help='')
@@ -36,7 +37,7 @@ parser.add_argument('--target',
                     type=str,
                     help='target, set to IJBC or IJBB')
 args = parser.parse_args()
-data_path = "/mnt/hdd/PycharmProjects/insightface/evaluation/IJB"
+data_path = "/mnt/hdd/IJB"
 
 target = args.target
 model_path = args.model_prefix
@@ -92,6 +93,8 @@ def get_image_feature(img_path, img_list_path, model_path, epoch, gpu_id):
     for img_index, each_line in enumerate(files):
         if img_index % 500 == 0:
             print('processing', img_index)
+            if img_index == 2000:
+                break
         name_lmk_score = each_line.strip().split(' ')
         img_name = os.path.join(img_path, name_lmk_score[0])
         img = cv2.imread(img_name)

@@ -6,14 +6,12 @@ from torch import nn
 import numpy as np
 from scrfd import SCRFD
 
-
-
-
 def NMELoss(predicted_landmark, target_landmark):
     # landmark is a numpy array which has shape [5, 2]
     num_face_landmark = 5
-    leye_reye_vec = torch.from_numpy(target_landmark[0] - target_landmark[1])
-    inter_occular_distance = LA.norm(leye_reye_vec)
+    leye_nouse_vec = torch.from_numpy(target_landmark[0] - target_landmark[2])
+    reye_nouse_vec = torch.from_numpy(target_landmark[1] - target_landmark[2])
+    inter_occular_distance = LA.norm(leye_nouse_vec) + LA.norm(reye_nouse_vec)
     loss = nn.MSELoss(reduction="sum")
     preloss = loss(torch.from_numpy(predicted_landmark), torch.from_numpy(target_landmark))
     nme_loss = torch.sqrt(preloss) / (inter_occular_distance * num_face_landmark)
@@ -29,7 +27,7 @@ img_list = open(img_list_path)
 files = img_list.readlines()
 print('files:', len(files))
 
-detector = SCRFD(model_file='model/scrfd_10g_bnkps.onnx')
+detector = SCRFD(model_file='/mnt/hdd/PycharmProjects/insightface/detection/scrfd/onnx/scrfd_34g_shape640x640.onnx')
 detector.prepare(-1)
 
 result = 0
@@ -44,15 +42,19 @@ for img_index, each_line in enumerate(files):
     bboxes, kpss = detector.detect(img, 0.02, input_size=(640, 640))
     predict_lanmark = kpss[np.argmax(bboxes, axis=0)[-1]]
 
-    # for p in predict_lanmark:
-    #     p = p.astype(np.int)
-    #     cv2.circle(img, tuple(p), 3, (0, 0, 255), 2)
+    for p in predict_lanmark:
+        p = p.astype(np.int)
+        cv2.circle(img, tuple(p), 2, (0, 255, 0), -1)
+
+    for p in target_lmk:
+        p = p.astype(np.int)
+        cv2.circle(img, tuple(p), 2, (0, 0, 255), -1)
 
     nme_loss = NMELoss(predict_lanmark, target_lmk).item()
     result = result + nme_loss
-    # print(nme_loss)
-    # cv2.imshow("le", img)
-    # cv2.waitKey(2000)
+    print(nme_loss)
+    cv2.imshow("le", img)
+    cv2.waitKey(2000)
 
 result = result/len(files)
 print("This is NMELoss:", result)

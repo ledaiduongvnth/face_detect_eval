@@ -4,7 +4,7 @@ import cv2
 from torch import linalg as LA
 from torch import nn
 import numpy as np
-import face_common
+from scrfd import SCRFD
 from wider_face import WiderFaceDetection
 
 
@@ -38,14 +38,8 @@ def NMELoss(predicted_landmark, target_landmark):
     return nme_loss
 
 
-face_recognizer = face_common.FaceRecognizer(
-    True,
-    "model/retinaface_resnet50_480x480.onnx",
-    480, 0.01, 0.4,
-    False,
-    "",
-    0
-)
+detector = SCRFD(model_file='/mnt/hdd/PycharmProjects/insightface/detection/scrfd/onnx/scrfd_34g_shape640x640.onnx')
+detector.prepare(-1)
 
 result = 0
 number_faces = 0
@@ -63,26 +57,23 @@ for i in range(len(dataset)):
 
             if i % 500 == 0:
                 print('processing', i)
-            detection = face_recognizer.Detect(img_face, False, False)
-            landmarks = detection[0].landmarks
-            predict_lanmark = []
-            for v in landmarks:
-                predict_lanmark.append([v.x, v.y])
-            predict_lanmark = np.array(predict_lanmark)
 
-            # for p in predict_lanmark:
-            #     p = p.astype(np.int)
-            #     cv2.circle(img_face, tuple(p), 2, (0, 255, 0), -1)
-            #
-            # for p in target_lmk:
-            #     p = p.astype(np.int)
-            #     cv2.circle(img_face, tuple(p), 2, (0, 0, 255), -1)
+            bboxes, kpss = detector.detect(img_face, 0.2, input_size=(640, 640))
+            predict_lanmark = kpss[np.argmax(bboxes, axis=0)[-1]]
+
+            for p in predict_lanmark:
+                p = p.astype(np.int)
+                cv2.circle(img_face, tuple(p), 2, (0, 255, 0), -1)
+
+            for p in target_lmk:
+                p = p.astype(np.int)
+                cv2.circle(img_face, tuple(p), 2, (0, 0, 255), -1)
 
             nme_loss = NMELoss(predict_lanmark, target_lmk).item()
             result = result + nme_loss
             print(nme_loss)
-            # cv2.imshow("img_face", img_face)
-            # cv2.waitKey(2000)
+            cv2.imshow("img_face", img_face)
+            cv2.waitKey(2000)
             if number_faces >= 100:
                 break
 
