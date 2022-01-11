@@ -35,10 +35,11 @@ class Embedding:
     self.src = src
     self.face_recognizer = face_common.FaceRecognizer(
       True,
-      "/mnt/hdd/CLionProjects/frvt1N/1N/config/retinaface_resnet50_480x480.onnx",
-      480, 0.0, 0.4,
+      "/mnt/hdd/PycharmProjects/insightface/detection/scrfd/scrfd_34g_n1/scrfd_34g_shape320x320.onnx",
+      320, 0.01, 0.4,
       True,
-      "/mnt/hdd/CLionProjects/frvt1N/1N/config/glint360k0.1.onnx"
+      "/mnt/hdd/CLionProjects/frvt1N/1N/config/iresnet100.onnx",
+      0
     )
 
   def get(self, rimg, landmark):
