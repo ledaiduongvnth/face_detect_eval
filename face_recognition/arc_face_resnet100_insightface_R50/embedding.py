@@ -76,8 +76,6 @@ class Embedding:
     tform.estimate(landmarks, self.src)
     M = tform.params[0:2,:]
     alignedFace = cv2.warpAffine(rimg,M,(self.image_size[1],self.image_size[0]), borderValue = 0.0)
-    cv2.imshow("img", alignedFace)
-    cv2.waitKey(2000)
     featureVector = self.face_recognizer.RecognizePytorch(alignedFace)
     alignedFaceFlip = cv2.flip(alignedFace, 1)
     featureVectorFlip = self.face_recognizer.RecognizePytorch(alignedFaceFlip)
