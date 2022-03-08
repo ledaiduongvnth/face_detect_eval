@@ -38,7 +38,7 @@ class Embedding:
       "/mnt/hdd/PycharmProjects/insightface/detection/scrfd/scrfd_34g_n1/scrfd_34g_shape320x320.onnx",
       320, 0.01, 0.4,
       True,
-      "/mnt/hdd/CLionProjects/frvt1N/1N/config/iresnet100.onnx",
+      "models/iresnet100_cosine_learning_rate_average_weighted.onnx",
       0
     )
 
