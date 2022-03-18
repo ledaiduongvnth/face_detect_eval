@@ -3,6 +3,7 @@ import cv2
 from insightface.app import MaskRenderer
 from numpy import random
 
+# TODO CHANGE PROCESS ORDER
 process_order = 7
 num_process = 8
 
@@ -41,7 +42,6 @@ for i_dir, image_dir in enumerate(job_dir):
         # read image from real_input_file_path, add mask and write to real_output_file_path
         print("Process:", real_input_file_path)
         image = cv2.imread(real_input_file_path)
-        # TODO randomize mask image
         mask_index = random.randint(len(masks))
         mask_image = masks[mask_index]
         style_index = random.randint(len(position_style))
