@@ -23,7 +23,7 @@ def crop_face(src_img, x1, y1, x2, y2, expanded_face_scale, target_lmk):
         landmark[1] = landmark[1] - new_top
     return face_image, new_left, new_top, target_lmk
 
-dataset = WiderFaceDetection("/mnt/hdd/PycharmProjects/Pytorch_Retinaface/data/widerface/train/label.txt")
+dataset = WiderFaceDetection("/mnt/hdd/PycharmProjects/Pytorch_Retinaface/data/train/label.txt")
 
 
 def NMELoss(predicted_landmark, target_landmark):
@@ -40,8 +40,8 @@ def NMELoss(predicted_landmark, target_landmark):
 
 face_recognizer = face_common.FaceRecognizer(
     True,
-    "model/retinaface_resnet50_480x480.onnx",
-    480, 0.01, 0.4,
+    "/mnt/hdd/PycharmProjects/Pytorch_Retinaface/weights/model_origin.onnx",
+    320, 0.01, 0.4,
     False,
     "",
     0
@@ -70,20 +70,20 @@ for i in range(len(dataset)):
                 predict_lanmark.append([v.x, v.y])
             predict_lanmark = np.array(predict_lanmark)
 
-            # for p in predict_lanmark:
-            #     p = p.astype(np.int)
-            #     cv2.circle(img_face, tuple(p), 2, (0, 255, 0), -1)
-            #
-            # for p in target_lmk:
-            #     p = p.astype(np.int)
-            #     cv2.circle(img_face, tuple(p), 2, (0, 0, 255), -1)
+            for p in predict_lanmark:
+                p = p.astype(np.int)
+                cv2.circle(img_face, tuple(p), 2, (0, 255, 0), -1)
+
+            for p in target_lmk:
+                p = p.astype(np.int)
+                cv2.circle(img_face, tuple(p), 2, (0, 0, 255), -1)
 
             nme_loss = NMELoss(predict_lanmark, target_lmk).item()
             result = result + nme_loss
             print(nme_loss)
             # cv2.imshow("img_face", img_face)
-            # cv2.waitKey(2000)
-            if number_faces >= 100:
+            # cv2.waitKey(1000)
+            if number_faces >= 50:
                 break
 
     if number_faces >= 100:

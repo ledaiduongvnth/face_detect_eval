@@ -1,0 +1,23 @@
+INFO 2022-04-19 13:41:34 BaseModelLoader.py: 34] Successfully parsed the model configuration file meta.json!
+INFO 2022-04-19 13:41:37 FaceAlignModelLoader.py: 29] Successfully loaded the face landmark model!
+INFO 2022-04-20 10:10:12 FaceAlignModelLoader.py: 17] Start to analyze the face landmark model, model path: models, model category: face_alignment，model name: face_alignment_1.0
+INFO 2022-04-20 10:10:12 BaseModelLoader.py: 34] Successfully parsed the model configuration file meta.json!
+INFO 2022-04-20 10:10:45 FaceAlignModelLoader.py: 29] Successfully loaded the face landmark model!
+INFO 2022-04-20 10:11:36 FaceAlignModelLoader.py: 17] Start to analyze the face landmark model, model path: models, model category: face_alignment，model name: face_alignment_1.0
+INFO 2022-04-20 10:11:36 BaseModelLoader.py: 34] Successfully parsed the model configuration file meta.json!
+INFO 2022-04-20 10:11:43 FaceAlignModelLoader.py: 29] Successfully loaded the face landmark model!
+INFO 2022-04-20 10:14:59 FaceAlignModelLoader.py: 17] Start to analyze the face landmark model, model path: models, model category: face_alignment，model name: face_alignment_1.0
+INFO 2022-04-20 10:14:59 BaseModelLoader.py: 34] Successfully parsed the model configuration file meta.json!
+INFO 2022-04-20 10:15:04 FaceAlignModelLoader.py: 29] Successfully loaded the face landmark model!
+INFO 2022-04-20 10:18:38 FaceAlignModelLoader.py: 17] Start to analyze the face landmark model, model path: models, model category: face_alignment，model name: face_alignment_1.0
+INFO 2022-04-20 10:18:38 BaseModelLoader.py: 34] Successfully parsed the model configuration file meta.json!
+INFO 2022-04-20 10:18:42 FaceAlignModelLoader.py: 29] Successfully loaded the face landmark model!
+INFO 2022-04-20 10:19:54 FaceAlignModelLoader.py: 17] Start to analyze the face landmark model, model path: models, model category: face_alignment，model name: face_alignment_1.0
+INFO 2022-04-20 10:19:54 BaseModelLoader.py: 34] Successfully parsed the model configuration file meta.json!
+INFO 2022-04-20 10:19:57 FaceAlignModelLoader.py: 29] Successfully loaded the face landmark model!
+INFO 2022-04-20 10:20:25 FaceAlignModelLoader.py: 17] Start to analyze the face landmark model, model path: models, model category: face_alignment，model name: face_alignment_1.0
+INFO 2022-04-20 10:20:25 BaseModelLoader.py: 34] Successfully parsed the model configuration file meta.json!
+INFO 2022-04-20 10:20:28 FaceAlignModelLoader.py: 29] Successfully loaded the face landmark model!
+INFO 2022-04-20 10:22:31 FaceAlignModelLoader.py: 17] Start to analyze the face landmark model, model path: models, model category: face_alignment，model name: face_alignment_1.0
+INFO 2022-04-20 10:22:31 BaseModelLoader.py: 34] Successfully parsed the model configuration file meta.json!
+INFO 2022-04-20 10:22:33 FaceAlignModelLoader.py: 29] Successfully loaded the face landmark model!
