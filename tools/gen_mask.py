@@ -9,7 +9,7 @@ import numpy as np
 from core.model_loader.face_alignment.FaceAlignModelLoader import FaceAlignModelLoader
 from core.model_handler.face_alignment.FaceAlignModelHandler import FaceAlignModelHandler
 from scrfd import SCRFD
-detector = SCRFD(model_file='scrfd_2.5g_bnkps_shape640x640.onnx')
+detector = SCRFD(model_file='scrfd_2.5g_bnkps_shape320x320.onnx')
 detector.prepare(-1)
 
 with open('config/model_conf.yaml') as f:
@@ -26,11 +26,9 @@ faceAlignModelHandler = FaceAlignModelHandler(model, 'cuda:0', cfg)
 
 
 def FaceXZoo(input_img_path, origin_image, mask_img, output_img_path):
-    bboxes, kpss = detector.detect(origin_image, 0.01, input_size=(640, 640))
-    bboxes = np.array(sorted(bboxes, key=lambda a_entry: a_entry[4], reverse=True))
+    bboxes, kpss = detector.detect(origin_image, 0.01, input_size=(320, 320))
     bbox = bboxes[0].astype(np.int)
     bbox = bbox[0:4]
-    print(bbox)
     landmarks = faceAlignModelHandler.inference_on_image(origin_image, bbox)
     is_aug = False
     face_masker = FaceMasker(is_aug)
