@@ -136,6 +136,8 @@ class SCRFD:
     def prepare(self, ctx_id, **kwargs):
         if ctx_id<0:
             self.session.set_providers(['CPUExecutionProvider'])
+        else:
+            self.session.set_providers(['CUDAExecutionProvider'], provider_options=[{'device_id': ctx_id}])
         nms_threshold = kwargs.get('nms_threshold', None)
         if nms_threshold is not None:
             self.nms_threshold = nms_threshold

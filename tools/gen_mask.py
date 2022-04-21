@@ -9,8 +9,14 @@ import numpy as np
 from core.model_loader.face_alignment.FaceAlignModelLoader import FaceAlignModelLoader
 from core.model_handler.face_alignment.FaceAlignModelHandler import FaceAlignModelHandler
 from scrfd import SCRFD
+
+# TODO CHANGE PROCESS ORDER
+process_order = 7
+num_process = 8
+gpu_id = 0
+
 detector = SCRFD(model_file='scrfd_2.5g_bnkps_shape320x320.onnx')
-detector.prepare(-1)
+detector.prepare(gpu_id)
 
 with open('config/model_conf.yaml') as f:
     model_conf = yaml.load(f)
@@ -22,7 +28,7 @@ model_name = model_conf[scene][model_category]
 
 faceAlignModelLoader = FaceAlignModelLoader(model_path, model_category, model_name)
 model, cfg = faceAlignModelLoader.load_model()
-faceAlignModelHandler = FaceAlignModelHandler(model, 'cuda:0', cfg)
+faceAlignModelHandler = FaceAlignModelHandler(model, 'cuda:' + str(gpu_id), cfg)
 
 
 def FaceXZoo(input_img_path, origin_image, mask_img, output_img_path):
@@ -31,12 +37,9 @@ def FaceXZoo(input_img_path, origin_image, mask_img, output_img_path):
     bbox = bbox[0:4]
     landmarks = faceAlignModelHandler.inference_on_image(origin_image, bbox)
     is_aug = False
-    face_masker = FaceMasker(is_aug)
+    face_masker = FaceMasker(is_aug, gpu_id=gpu_id)
     face_masker.add_mask_one(input_img_path, landmarks, mask_img, output_img_path)
 
-# TODO CHANGE PROCESS ORDER
-process_order = 7
-num_process = 8
 
 input_dataset_dir = "/media/ubuntu/DATA/vinh/face-datasets/webface/images/data/WebFace260M"
 output_dataset_dir = "/media/ubuntu/DATA/vinh/face-datasets/webface/images/data/WebFace260MMask"
@@ -52,7 +55,7 @@ job_dir = dirs[process_order * num_images_per_task: (process_order + 1) * num_im
 print("Total folder:", len(job_dir))
 
 tool = MaskRenderer()
-tool.prepare(ctx_id=0, det_size=(128, 128))
+tool.prepare(ctx_id=gpu_id, det_size=(128, 128))
 position_style = [[0.1, 0.5, 0.9, 0.7], [0.1, 0.33, 0.9, 0.7]]
 algorithm_list = ["insightface", "facexzoo"]
 

@@ -22,7 +22,7 @@ class PRN:
     based on:
     https://github.com/YadiraF/PRNet/blob/master/api.py 
     """
-    def __init__(self, model_path):
+    def __init__(self, model_path, gpu_id):
         self.resolution = 256
         self.MaxPos = self.resolution*1.1
         self.face_ind = np.loadtxt('Data/uv-data/face_ind.txt').astype(np.int32)
@@ -31,8 +31,9 @@ class PRN:
         state_dict = torch.load(model_path)
         self.net.load_state_dict(state_dict)
         self.net.eval()
+        self.gpu_id = gpu_id
         if torch.cuda.is_available():
-            self.net = self.net.to('cuda')
+            self.net = self.net.to('cuda:' + str(self.gpu_id))
     def process(self, image, image_info):
         if np.max(image_info.shape) > 4: # key points to get bounding box
             kpt = image_info
@@ -56,7 +57,7 @@ class PRN:
         cropped_image = np.transpose(cropped_image[np.newaxis, :,:,:], (0, 3, 1, 2)).astype(np.float32)
         cropped_image = torch.from_numpy(cropped_image)
         if torch.cuda.is_available:
-            cropped_image = cropped_image.cuda()
+            cropped_image = cropped_image.cuda(self.gpu_id)
         with torch.no_grad():
             cropped_pos = self.net(cropped_image)
         cropped_pos = cropped_pos.cpu().detach().numpy()
@@ -89,7 +90,7 @@ class FaceMasker:
         template_name2uv_mask_src(dict): key is template name, value is the uv_mask. 
         is_aug(bool): whether or not to add some augmentaion operation on the mask.
     """
-    def __init__(self, is_aug):
+    def __init__(self, is_aug, gpu_id):
         """init for FaceMasker
         
         Args:
@@ -97,7 +98,7 @@ class FaceMasker:
         """
         self.uv_face_path = 'Data/uv-data/uv_face_mask.png'
         self.mask_template_folder = 'Data/mask-data'
-        self.prn = PRN('model/prnet.pth')
+        self.prn = PRN('model/prnet.pth', gpu_id=gpu_id)
         self.template_name2ref_texture_src, self.template_name2uv_mask_src = self.get_ref_texture_src()
         self.is_aug = is_aug
 
