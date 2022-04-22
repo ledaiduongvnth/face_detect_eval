@@ -11,11 +11,11 @@ from core.model_handler.face_alignment.FaceAlignModelHandler import FaceAlignMod
 from scrfd import SCRFD
 
 # TODO CHANGE PROCESS ORDER
-process_order = 7
-num_process = 8
-gpu_id = 0
+process_order = 1
+num_process = 2
+gpu_id = 2
 
-detector = SCRFD(model_file='scrfd_2.5g_bnkps_shape320x320.onnx')
+detector = SCRFD(model_file="scrfd_500m_bnkps_shape320x320.onnx")
 detector.prepare(gpu_id)
 
 with open('config/model_conf.yaml') as f:
